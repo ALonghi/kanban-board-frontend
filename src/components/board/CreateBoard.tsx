@@ -1,0 +1,62 @@
+import { Dialog } from "@headlessui/react";
+import { useState, useEffect } from 'react';
+import InputForm from "../shared/InputForm";
+import Modal from "../shared/Modal";
+import Spinner from "../shared/Spinner/Spinner";
+import BoardService from '../../service/boardService';
+
+
+export default function CreateBoard({ open, setOpen }) {
+
+    const [board, setBoard] = useState({ title: "" })
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+
+    const createBoard = () => {
+        setIsLoading(true)
+        BoardService
+            .createBoard(board)
+            .then(() => {
+                setBoard({ title: "" })
+                setOpen(false)
+            })
+            .finally(() => setIsLoading(false))
+    }
+
+    useEffect(() => {
+        console.log(`isLoading ${isLoading}`)
+    }, [isLoading])
+
+    return (
+        <Modal open={open} setOpen={setOpen}>
+            <div className="w-10/12 mx-auto">
+                <div>
+                    <div className="mt-3 text-center sm:mt-5 ">
+                        <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
+                            Create new board
+                        </Dialog.Title>
+                        <div className="mt-2">
+                            <p className="text-sm text-gray-500">
+                                Add details of your new board
+                            </p>
+                        </div>
+                        <div className="my-12">
+                            <InputForm componentClasses="text-left" inputClasses="mt-2 mb-4" value={board.title} name="boardTitle" type="text"
+                                placeholder="e.g. Recruiting Board" label="Name"
+                                updateValue={(title) => setBoard(p => ({ ...p, title: title }))} />
+                        </div>
+                    </div>
+                </div>
+                <div className="mt-5 sm:my-8">
+                    <button
+                        type="button"
+                        className="inline-flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:text-sm"
+                        onClick={() => createBoard()}
+                    >
+                        {isLoading ? <Spinner size={20} colorHex="fff" /> : `Save Board`}
+
+                    </button>
+                </div>
+            </div>
+        </Modal>
+    )
+}

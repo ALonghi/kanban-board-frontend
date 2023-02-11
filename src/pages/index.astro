@@ -1,0 +1,30 @@
+---
+import BoardView from "../components/board/BoardView";
+import Sidebar from "../components/shared/Sidebar";
+import Layout from "../layouts/Layout.astro";
+import BoardService from "../service/boardService";
+import "./global.css";
+const boards = await BoardService.getBoards();
+---
+
+<Layout title="Kanban Board">
+  <main class="w-full h-full flex ">
+    <Sidebar />
+    <div class="block text-left w-full">
+      <BoardView client:visible boards={boards} />
+    </div>
+  </main>
+</Layout>
+
+<style is:global>
+  main {
+    max-width: 100vw;
+  }
+  .text-gradient {
+    background-image: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 400%;
+    background-position: 0%;
+  }
+</style>
