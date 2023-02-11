@@ -24,7 +24,7 @@ const InputForm: React.FC<InputFormProps> = (props) => {
                     name={props.name}
                     id={props.name}
                     defaultValue={props.value}
-                    className={`shadow-md focus:ring-indigo-500 focus:border-indigo-500 block pl-3 pr-10 py-2
+                    className={`shadow-md focus:ring-theme-700 focus:border-theme-700 block pl-3 pr-10 py-2
              w-max sm:text-sm border-gray-400 rounded-md ${Utils.classNames(props.inputClasses)}`}
                     placeholder={props.placeholder}
                     onChange={(e) => props.updateValue(e.target.value)}

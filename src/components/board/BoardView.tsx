@@ -12,15 +12,17 @@ export default function BoardView({ boards }) {
                 <h1 className="w-full text-4xl font-bold ml-12">
                     Welcome to <span className="text-gradient">your Boards</span>
                 </h1>
-                <button
-                    type="button" onClick={() => setOpen(true)}
-                    className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 
+                {boards?.length > 0 &&
+                    <button
+                        type="button" onClick={() => setOpen(true)}
+                        className="inline-flex items-center rounded-md border border-transparent bg-theme-400 
                     mr-8 px-4 py-1.5 h-fit text-sm font-base text-white shadow-sm 
-                    hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >
-                    <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                    Create
-                </button>
+                    hover:bg-theme-500 focus:outline-none focus:ring-2 focus:ring-theme-700 focus:ring-offset-2"
+                    >
+                        <PlusIcon className="-ml-2 mr-2 h-5 w-5" aria-hidden="true" />
+                        Create
+                    </button>
+                }
             </div>
             <div className="mt-8">
                 {boards?.length > 0 ? null : <EmptyBoard setOpen={setOpen} />}

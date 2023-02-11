@@ -22,10 +22,6 @@ export default function CreateBoard({ open, setOpen }) {
             .finally(() => setIsLoading(false))
     }
 
-    useEffect(() => {
-        console.log(`isLoading ${isLoading}`)
-    }, [isLoading])
-
     return (
         <Modal open={open} setOpen={setOpen}>
             <div className="w-10/12 mx-auto">
@@ -49,7 +45,8 @@ export default function CreateBoard({ open, setOpen }) {
                 <div className="mt-5 sm:my-8">
                     <button
                         type="button"
-                        className="inline-flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:text-sm"
+                        className="inline-flex w-full justify-center rounded-md border border-transparent 
+                        bg-theme-500 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-theme-600 focus:outline-none focus:ring-2 focus:ring-theme-700 focus:ring-offset-2 sm:text-sm"
                         onClick={() => createBoard()}
                     >
                         {isLoading ? <Spinner size={20} colorHex="fff" /> : `Save Board`}
