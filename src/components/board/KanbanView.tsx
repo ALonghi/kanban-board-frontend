@@ -30,7 +30,16 @@ export default function KanbanView({ board, tasks }: KanbanViewProps) {
   };
 
   return (
-    <div className="mx-2 my-8 w-full flex ">
+    <div className="mx-2 my-8 w-full flex overflow-x-scroll">
+      <BoardColumn
+        tasks={tasks
+          ?.filter((t) => !currentBoard?.columns.map(c => c.id).includes(t.column_id))
+          ?.sort((t) => (t.position > t.position ? 1 : -1)) || []
+        }
+        updateTasks={() => null}
+        updateBoardColumn={updateBoardColumn}
+        overriddenName="Unassigned"
+      />
       {currentBoard?.columns?.map((col) => (
         <BoardColumn
           key={col.id}

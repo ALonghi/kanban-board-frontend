@@ -26,10 +26,12 @@ type TaskColumnProps = {
   tasks: ITask[];
   updateTasks: (tasks: ITask[]) => void;
   updateBoardColumn: (column: IBoardColumn) => Promise<void>;
+  overriddenName?: string
 };
 
 export default function TaskColumn({
   column,
+  overriddenName,
   tasks,
   updateTasks,
   updateBoardColumn,
@@ -87,9 +89,12 @@ export default function TaskColumn({
           className={` mb-4 letter-spacing-2 py-1 px-4 flex flex-col
              tasks-center justify-center bg-gray-100 rounded-t-md`}
         >
-          {currentColumn?.name && !isTyping ? (
-            <p className={`w-fit font-bold text-gray-700 uppercase text-sm `}>
-              {currentColumn?.name || "Create new column"}
+          {(currentColumn?.name && !isTyping) || overriddenName ? (
+            <p className={`w-fit font-bold text-gray-700 ${overriddenName ? `` : `uppercase`} text-sm `}>
+              {currentColumn?.name || (
+                overriddenName ? overriddenName : "Create new column"
+              )
+              }
             </p>
           ) : (
             <div className="flex w-full justify-between items-center">

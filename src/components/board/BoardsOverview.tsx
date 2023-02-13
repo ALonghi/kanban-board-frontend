@@ -23,7 +23,7 @@ export default function BoardsOverview({ boards }) {
   return (
     <>
       <div
-        className="my-16 flex sm:w-8/12 items-center  mx-auto flex-row
+        className="my-16 flex sm:w-10/12 items-center justify-between mx-auto flex-row
             ml-8 sm:mx-auto"
       >
         <h1 className="w-8/12 text-3xl sm:text-4xl font-bold clip">

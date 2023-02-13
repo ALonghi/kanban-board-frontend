@@ -1,6 +1,6 @@
 import React from 'react';
 import TaskColumn from '@/components/task/TaskColumn';
-import './App.css';
+import './App.scss';
 
 function App() {
   return (
