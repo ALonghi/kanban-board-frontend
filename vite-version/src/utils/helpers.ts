@@ -1,14 +1,4 @@
-const colors = [
-  'red',
-  'orange',
-  'yellow',
-  'green',
-  'teal',
-  'blue',
-  'cyan',
-  'purple',
-  'pink',
-];
+const colors = ['red', 'orange', 'yellow', 'green', 'teal', 'blue', 'cyan', 'purple', 'pink'];
 
 export function swap<T>(arr: T[], i: number, j: number): T[] {
   const copy = [...arr];

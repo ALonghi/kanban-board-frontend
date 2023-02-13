@@ -3,11 +3,7 @@
     "baseUrl": ".",
     "target": "ESNext",
     "useDefineForClassFields": true,
-    "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "ESNext"
-    ],
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "allowJs": false,
     "skipLibCheck": true,
     "esModuleInterop": false,
@@ -21,18 +17,10 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "paths": {
-      "@/utils/*": [
-        "./src/utils/*"
-      ],
-      "@/model/*": [
-        "src/model/*"
-      ],
-      "@/hooks/*": [
-        "src/hooks/*"
-      ],
-      "@/components/*": [
-        "src/components/*"
-      ]
+      "@/utils/*": ["./src/utils/*"],
+      "@/model/*": ["src/model/*"],
+      "@/hooks/*": ["src/hooks/*"],
+      "@/components/*": ["src/components/*"]
     }
   },
   "include": ["src"],
