@@ -8,11 +8,15 @@ import TaskCard from "./TaskCard";
 type SortableTaskProps = {
   task: ITask;
   someoneIsDragging: boolean;
+  onUpdate: (updatedTask: ITask | Partial<ITask>) => Promise<void>;
+  onDelete: (id: ITask['id']) => Promise<void>;
 };
 
 export const SortableTask = ({
   task,
   someoneIsDragging,
+  onUpdate,
+  onDelete
 }: SortableTaskProps) => {
   const {
     attributes,
@@ -47,7 +51,10 @@ export const SortableTask = ({
       }}
       className={isDragging ? `opacity-60` : `opacity-100`}
     >
-      <TaskCard task={task} />
+      <TaskCard task={task}
+        onUpdate={onUpdate}
+        onDelete={onDelete}
+      />
     </div>
   );
 };

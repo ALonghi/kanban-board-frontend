@@ -12,6 +12,7 @@ type KanbanViewProps = {
 
 export default function KanbanView({ board, tasks }: KanbanViewProps) {
   const [currentBoard, setCurrentBoard] = useState<IBoard>(board);
+  const [boardTasks, setBoardTasks] = useState<ITask[]>(tasks || []);
 
   const updateBoardColumn = async (col: IBoardColumn) => {
     const previousColumns =
@@ -30,33 +31,37 @@ export default function KanbanView({ board, tasks }: KanbanViewProps) {
   };
 
   return (
-    <div className="mx-2 my-8 w-full flex overflow-x-scroll">
+    <div className="mx-2 my-8 min-w-full flex overflow-x-auto flex-nowrap">
       <BoardColumn
-        tasks={tasks
-          ?.filter((t) => !currentBoard?.columns.map(c => c.id).includes(t.column_id))
-          ?.sort((t) => (t.position > t.position ? 1 : -1)) || []
+        tasks={boardTasks
+          ?.filter((t) => currentBoard?.columns?.length > 0
+            ? !currentBoard?.columns?.map(c => c.id)?.includes(t?.column_id)
+            : true
+          )
         }
-        updateTasks={() => null}
+        updateTasks={(list) => setBoardTasks(list)}
         updateBoardColumn={updateBoardColumn}
         overriddenName="Unassigned"
+        boardId={board.id}
       />
       {currentBoard?.columns?.map((col) => (
         <BoardColumn
           key={col.id}
           column={col}
           tasks={
-            tasks
+            boardTasks
               ?.filter((t) => t.column_id === col.id)
-              ?.sort((t) => (t.position > t.position ? 1 : -1)) || []
           }
           updateTasks={(tasks) => null}
           updateBoardColumn={updateBoardColumn}
+          boardId={board.id}
         />
       ))}
       <BoardColumn
         tasks={[]}
         updateTasks={() => null}
         updateBoardColumn={updateBoardColumn}
+        boardId={board.id}
       />
     </div>
   );
