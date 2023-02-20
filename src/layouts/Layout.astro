@@ -1,5 +1,6 @@
 ---
 import Sidebar from "../components/shared/Sidebar";
+import "../styles/global.css"
 export interface Props {
   title: string;
 }
@@ -17,7 +18,7 @@ const { title } = Astro.props;
     <title>{title}</title>
   </head>
   <body class="flex flex-row bg-white">
-    <Sidebar />
+    <Sidebar client:idle />
     <div
       class="flex py-10 px-14 justify-center items-start w-full max-w-full overflow-hidden min-h-full"
     >
