@@ -1,24 +1,7 @@
-const colors = [
-  "red",
-  "orange",
-  "yellow",
-  "green",
-  "teal",
-  "blue",
-  "cyan",
-  "purple",
-  "pink",
-];
+import {ITask} from "../model/task";
 
-export function swap<T>(arr: T[], i: number, j: number): T[] {
-  const copy = [...arr];
-  const tmp = copy[i];
-  copy[i] = copy[j];
-  copy[j] = tmp;
-  return copy;
-}
-
-export function pickRandomColor(variant = "") {
-  const color = colors[Math.floor(Math.random() * colors.length)];
-  return color + variant;
-}
+export const getDifference = (initialArray: Omit<ITask, "position">[], newArray: Omit<ITask, "position">[]): Omit<ITask, "position">[] =>
+    newArray.filter((t, i) => {
+        const initialVersion = initialArray.find(t2 => t2.id === t.id)
+        return initialVersion?.above_task_id !== t.above_task_id
+    })

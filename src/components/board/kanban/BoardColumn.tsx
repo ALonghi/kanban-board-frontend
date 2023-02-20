@@ -19,6 +19,7 @@ import TaskService from "../../../service/taskService";
 import SaveIcon from "../../shared/SaveIcon";
 import {SortableTask} from "./SortableTask";
 import TaskCard from "./TaskCard";
+import {getDifference} from "../../../utils/helpers";
 
 type TaskColumnProps = {
     column?: IBoardColumn;
@@ -84,14 +85,10 @@ export default function TaskColumn({
                 delete t.position
                 return t
             })
-            const getDifference = (initialArray: Omit<ITask, "position">[], newArray: Omit<ITask, "position">[]): Omit<ITask, "position">[] =>
-                newArray.filter((t, i) => {
-                    const initialVersion = initialArray.find(t2 => t2.id === t.id)
-                    return initialVersion?.above_task_id !== t.above_task_id
-                })
+
             const toUpdate = getDifference(oldMapped, mapped);
 
-            TaskService.updateTasks(toUpdate, boardId).then(updatedTasks => {
+            TaskService.updateTasks(toUpdate, boardId).then(() => {
                     const mappedWithPosition = mapped.map((t, i) => ({...t, position: i}));
                     updateTasks(mappedWithPosition)
                 }
