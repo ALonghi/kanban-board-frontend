@@ -1,0 +1,14 @@
+---
+import BoardsOverview from "../components/board/BoardsOverview";
+import Layout from "../layouts/Layout.astro";
+import BoardService from "../service/boardService";
+const boards = await BoardService.getBoards();
+---
+
+<Layout title="Kanban Board">
+  <main class="w-full h-full flex flex-col">
+    <BoardsOverview client:visible boards={boards} />
+  </main>
+</Layout>
+
+<style is:global></style>
