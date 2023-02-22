@@ -24,6 +24,7 @@ import SaveIcon from "../../shared/SaveIcon";
 import { SortableTask } from "./SortableTask";
 import TaskCard from "./TaskCard";
 import { getDifference } from "../../../utils/helpers";
+import Logger from "../../../utils/logging";
 
 type TaskColumnProps = {
   column?: IBoardColumn;
@@ -55,7 +56,7 @@ export default function TaskColumn({
     useSensor(MouseSensor, {
       activationConstraint: {
         delay: 100,
-        tolerance: { x: 0, y: 20 },
+        tolerance: { x: 0, y: 15 },
       },
     }),
     useSensor(TouchSensor)
@@ -166,14 +167,28 @@ export default function TaskColumn({
   };
 
   const deleteTask = async (taskId: ITask["id"]) => {
-    await TaskService.deleteTask(taskId, boardId).then(() => {
-      const updatedTasks = tasks?.filter((t) => t.id !== taskId);
-      console.log(
-        `after removal of ${taskId} ${
-          tasks?.find((t) => t.id === taskId)?.title
-        } ${JSON.stringify(updatedTasks, null, 2)}`
-      );
-      updateTasks(updatedTasks);
+    await TaskService.deleteTask(taskId, boardId).then(async () => {
+      const elemIndex = tasks.findIndex((t) => t.id === taskId);
+      if (elemIndex >= 0 && elemIndex < tasks.length - 1) {
+        // element exists and is not the last in the list
+        const nextElem = tasks[elemIndex + 1];
+        const nextElemUpdated: ITask = {
+          ...tasks[elemIndex + 1],
+          above_task_id:
+            elemIndex === 0 ? tasks[0]?.id : tasks[elemIndex - 1]?.id,
+          position: nextElem.position - 1,
+        };
+        const nextElemUpdatedNoPosition: ITask = JSON.parse(
+          JSON.stringify(nextElemUpdated)
+        );
+        delete nextElemUpdatedNoPosition.position;
+        await TaskService.updateTask(nextElemUpdatedNoPosition, boardId);
+
+        const updatedTasks = tasks
+          .map((t) => (t.id === nextElem.id ? nextElemUpdated : t))
+          .filter((t) => t.id !== taskId);
+        updateTasks(updatedTasks);
+      }
     });
   };
 

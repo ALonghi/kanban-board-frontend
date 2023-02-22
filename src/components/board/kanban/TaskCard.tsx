@@ -27,7 +27,7 @@ TaskProps) {
   const [isFocused, setIsFocused] = useState<boolean>(!!isFocus);
   const [taskTitle, setTaskTitle] = useState<string>(task.title || "");
 
-  const handleTitleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTaskTitle(e.target.value);
   };
 
@@ -79,13 +79,14 @@ TaskProps) {
             />
           </div>
           {isNew ? (
-            <textarea
+            <input
               onChange={handleTitleChange}
               defaultValue={task.title}
               ref={(input) => (isNew && input ? input.focus() : null)}
+              onKeyDown={(e) => (e.key === "Enter" ? handleSaveTask() : null)}
               className={`focus-visible:ring-0 focus-visible:border-0
                           focus-visible:outline-0 bg-white mr-auto ml-0 overflow-x-none
-                          font-normal text-sm p-0 h-fit max-h-full resize-none w-8/12`}
+                          font-normal text-sm p-0 h-fit max-h-full resize-none w-8/12 text-clip`}
             />
           ) : (
             <p

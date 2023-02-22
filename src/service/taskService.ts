@@ -54,7 +54,7 @@ export default class TaskService {
         )}`
       );
       const response = (await axios
-        .put(`/boards/${boardId}/tasks`, [task])
+        .put(`/tasks`, [task])
         .then((res) => res.data)) as ApiResponse<ITask[]>;
       if (!response.success || !response.data)
         throw new Error(response.error_message);
