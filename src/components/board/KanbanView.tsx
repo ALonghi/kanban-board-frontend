@@ -31,14 +31,16 @@ export default function KanbanView({ board, tasks }: KanbanViewProps) {
   };
 
   return (
-    <div className="mx-2 my-8 min-w-full flex overflow-x-auto flex-nowrap">
+    <div
+      className="mx-2 my-8 min-w-full flex flex-1 items-stretch
+    gap-x-2 overflow-x-scroll flex-nowrap w-fit"
+    >
       <BoardColumn
-        tasks={boardTasks
-          ?.filter((t) => currentBoard?.columns?.length > 0
-            ? !currentBoard?.columns?.map(c => c.id)?.includes(t?.column_id)
+        tasks={boardTasks?.filter((t) =>
+          currentBoard?.columns?.length > 0
+            ? !currentBoard?.columns?.map((c) => c.id)?.includes(t?.column_id)
             : true
-          )
-        }
+        )}
         updateTasks={(list) => setBoardTasks(list)}
         updateBoardColumn={updateBoardColumn}
         overriddenName="Unassigned"
@@ -48,10 +50,7 @@ export default function KanbanView({ board, tasks }: KanbanViewProps) {
         <BoardColumn
           key={col.id}
           column={col}
-          tasks={
-            boardTasks
-              ?.filter((t) => t.column_id === col.id)
-          }
+          tasks={boardTasks?.filter((t) => t.column_id === col.id)}
           updateTasks={(tasks) => null}
           updateBoardColumn={updateBoardColumn}
           boardId={board.id}

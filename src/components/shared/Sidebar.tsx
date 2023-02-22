@@ -1,6 +1,8 @@
 import { Dialog, Transition } from "@headlessui/react";
 import {
-  Bars3BottomLeftIcon, InboxStackIcon, XMarkIcon
+  Bars3BottomLeftIcon,
+  InboxStackIcon,
+  XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { Fragment, useState } from "react";
 import Utils from "../../utils/utils";

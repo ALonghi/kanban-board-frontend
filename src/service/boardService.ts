@@ -4,7 +4,6 @@ import { instance as axios } from "../utils/axios";
 import Logger from "../utils/logging";
 
 export default class BoardService {
-  
   static async createBoard(board: CreateBoardRequest): Promise<IBoard> {
     try {
       Logger.info(`Adding board ${JSON.stringify(board)}`);
