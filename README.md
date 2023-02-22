@@ -1,12 +1,13 @@
 # kanban-board-frontend
 
+Backend for the app can be found at [https://github.com/ALonghi/kanban-board-backend](https://github.com/ALonghi/kanban-board-backend)
+
 ## Run the app
 
-The app can be run with [docker compose](https://docs.docker.com/compose/)
-by executing:
+Execute the command:
 
 ```sh
-docker compose up
+npm run dev
 ```
 
 ### Colors
