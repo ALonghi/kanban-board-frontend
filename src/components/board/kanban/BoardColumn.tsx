@@ -16,26 +16,28 @@ import {
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 
+import { cloneDeep } from "lodash";
 import { IBoardColumn } from "../../../model/board";
 import { CreateTaskRequest } from "../../../model/dto";
 import { getEmptyTask, ITask } from "../../../model/task";
+import { createToast, IToast } from "../../../model/toast";
 import TaskService from "../../../service/taskService";
+import { addNotification } from "../../../stores/notificationStore";
+import { getDifference } from "../../../utils/helpers";
 import SaveIcon from "../../shared/SaveIcon";
 import { SortableTask } from "./SortableTask";
 import TaskCard from "./TaskCard";
-import { getDifference } from "../../../utils/helpers";
-import Logger from "../../../utils/logging";
 
 type TaskColumnProps = {
   column?: IBoardColumn;
   tasks: ITask[];
-  updateTasks: (tasks: ITask[]) => void;
+  updateTasks?: (tasks: ITask[]) => void;
   updateBoardColumn: (column: IBoardColumn) => Promise<void>;
   overriddenName?: string;
   boardId: string;
 };
 
-export default function TaskColumn({
+export default function BoardColumn({
   column,
   overriddenName,
   tasks,
@@ -55,8 +57,8 @@ export default function TaskColumn({
   const sensors = useSensors(
     useSensor(MouseSensor, {
       activationConstraint: {
-        delay: 100,
-        tolerance: { x: 0, y: 15 },
+        delay: 150,
+        tolerance: { x: 100, y: 50 },
       },
     }),
     useSensor(TouchSensor)
@@ -77,7 +79,9 @@ export default function TaskColumn({
       const reordered = arrayMove([...tasks], oldIndex, newIndex).map(
         (t, i) => ({ ...t, position: i })
       );
-      updateTasks(reordered);
+      updateTasks
+        ? updateTasks(reordered)
+        : console.warn("updateTasks not provided");
 
       const mapped = reordered?.map((task, i) => {
         delete task.position;
@@ -102,7 +106,9 @@ export default function TaskColumn({
             ...t,
             position: i,
           }));
-          updateTasks(mappedWithPosition);
+          updateTasks
+            ? updateTasks(mappedWithPosition)
+            : console.warn("updateTasks not provided");
         })
         .catch((err) => console.error(`Received error ${err.message || err}`));
     }
@@ -143,6 +149,11 @@ export default function TaskColumn({
             : updateTasks([...tasks, result]);
           setIsTyping(false);
           setNewTaskData(null);
+          const toast: IToast = createToast(
+            "Task updated successfully.",
+            "success"
+          );
+          addNotification(toast);
         }
       );
     } else {
@@ -162,34 +173,54 @@ export default function TaskColumn({
         updateTasks(updatedList);
         setIsTyping(false);
         setNewTaskData(null);
+        const toast: IToast = createToast(
+          "Task created successfully.",
+          "success"
+        );
+        addNotification(toast);
       });
     }
   };
 
   const deleteTask = async (taskId: ITask["id"]) => {
-    await TaskService.deleteTask(taskId, boardId).then(async () => {
-      const elemIndex = tasks.findIndex((t) => t.id === taskId);
-      if (elemIndex >= 0 && elemIndex < tasks.length - 1) {
+    await TaskService.deleteTask(taskId, boardId)
+      .then(async () => {
+        const elemIndex = tasks.findIndex((t) => t.id === taskId);
         // element exists and is not the last in the list
-        const nextElem = tasks[elemIndex + 1];
+        const nextElem = tasks?.length > 1 ? tasks[elemIndex + 1] : null;
         const nextElemUpdated: ITask = {
           ...tasks[elemIndex + 1],
-          above_task_id:
-            elemIndex === 0 ? tasks[0]?.id : tasks[elemIndex - 1]?.id,
-          position: nextElem.position - 1,
+          above_task_id: elemIndex === 0 ? null : tasks[elemIndex - 1]?.id,
+          position: nextElem?.position
+            ? nextElem?.position - 1
+            : tasks.length - 1,
         };
-        const nextElemUpdatedNoPosition: ITask = JSON.parse(
-          JSON.stringify(nextElemUpdated)
-        );
-        delete nextElemUpdatedNoPosition.position;
-        await TaskService.updateTask(nextElemUpdatedNoPosition, boardId);
+        if (nextElem) {
+          const nextElemUpdatedNoPosition: ITask = cloneDeep(nextElemUpdated);
+          delete nextElemUpdatedNoPosition.position;
+          await TaskService.updateTask(nextElemUpdatedNoPosition, boardId);
+        }
 
         const updatedTasks = tasks
-          .map((t) => (t.id === nextElem.id ? nextElemUpdated : t))
+          .map((t) => (t.id === nextElem?.id ? nextElemUpdated : t))
           .filter((t) => t.id !== taskId);
-        updateTasks(updatedTasks);
-      }
-    });
+        updateTasks
+          ? updateTasks(updatedTasks)
+          : console.warn("updateTasks not provided");
+        const toast: IToast = createToast(
+          "The requested task was deleted.",
+          "success"
+        );
+        addNotification(toast);
+      })
+      .catch((err) => {
+        const toast: IToast = createToast(
+          `Task delete error: ${err.message}`,
+          "error"
+        );
+        addNotification(toast);
+        console.error(`error in task delete ${err?.message} ${err}`);
+      });
   };
 
   return (

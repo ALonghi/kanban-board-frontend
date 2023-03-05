@@ -1,13 +1,12 @@
 ---
-import KanbanView from "../../components/board/KanbanView";
+import KanbanView from "../../components/board/kanban//KanbanView";
 import Layout from "../../layouts/Layout.astro";
 import BoardService from "../../service/boardService";
 import TaskService from "../../service/taskService";
+import { updateBoard } from "../../stores/boardsStore";
 const { board_id } = Astro.params;
-const board = await BoardService.getBoard(board_id);
+const board = await BoardService.getBoard(board_id).then(updateBoard);
 const tasks = board ? await TaskService.getTasksByBoardId(board_id) : [];
-console.log(`got ${tasks.length} tasks`);
-console.log(`board page tasks response: \n${JSON.stringify(tasks)}`);
 ---
 
 <Layout title="Kanban Board">

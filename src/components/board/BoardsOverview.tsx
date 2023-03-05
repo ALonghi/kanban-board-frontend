@@ -1,20 +1,22 @@
-import { useState } from "react";
-import CreateBoard from "./CreateBoard";
-import EmptyBoard from "./EmptyBoard";
 import { PlusIcon } from "@heroicons/react/20/solid";
-import BoardService from "../../service/boardService";
-import BoardCard from "./BoardCard";
+import { useStore } from "@nanostores/react";
+import { useState } from "react";
 import { IBoard } from "../../model/board";
 import { CreateBoardRequest } from "../../model/dto";
+import BoardService from "../../service/boardService";
+import { cachedBoards } from "../../stores/boardsStore";
+import BoardCard from "./BoardCard";
+import CreateBoard from "./CreateBoard";
+import EmptyBoard from "./EmptyBoard";
 
-export default function BoardsOverview({ boards }) {
-  const [currentBoards, setCurrentBoards] = useState<any[]>(boards || []);
+export default function BoardsOverview() {
+  const $cachedBoards = useStore(cachedBoards);
   const [open, setOpen] = useState<boolean>(false);
 
   const addBoard = async (board: CreateBoardRequest) => {
     return await BoardService.createBoard(board).then(
       (board_response: IBoard) => {
-        setCurrentBoards((prevState) => [...prevState, board_response]);
+        addBoard(board_response);
         setOpen(false);
       }
     );
@@ -29,7 +31,7 @@ export default function BoardsOverview({ boards }) {
         <h1 className="w-8/12 text-3xl sm:text-4xl font-bold clip">
           Welcome to <span className="text-gradient">your Boards</span>
         </h1>
-        {currentBoards?.length > 0 && (
+        {$cachedBoards?.length > 0 && (
           <button
             type="button"
             onClick={() => setOpen(true)}
@@ -43,9 +45,9 @@ export default function BoardsOverview({ boards }) {
         )}
       </div>
 
-      {currentBoards?.length > 0 ? (
+      {$cachedBoards?.length > 0 ? (
         <ul className="w-10/12 mx-auto flex justify-start items-start flex-wrap">
-          {currentBoards.map((board) => (
+          {$cachedBoards.map((board) => (
             <BoardCard board={board} key={board.id} />
           ))}
         </ul>

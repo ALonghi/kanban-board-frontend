@@ -2,11 +2,14 @@
 import BoardsOverview from "../components/board/BoardsOverview";
 import Layout from "../layouts/Layout.astro";
 import BoardService from "../service/boardService";
-const boards = await BoardService.getBoards();
+import { replaceBoards } from "../stores/boardsStore";
+await BoardService.getBoards()
+  .then((boards) => replaceBoards(boards))
+  .catch((err) => console.error(`Got fetch error ${err.message} ${err}`));
 ---
 
 <Layout title="Kanban Board">
   <main class="w-full h-full flex flex-col items-center">
-    <BoardsOverview client:visible boards={boards} />
+    <BoardsOverview client:only />
   </main>
 </Layout>
