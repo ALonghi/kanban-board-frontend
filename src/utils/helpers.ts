@@ -20,3 +20,11 @@ export function groupBy<K, V>(array: V[], grouper: (item: V) => K) {
     return store;
   }, new Map<K, V[]>());
 }
+
+export const sortByPosition = (tasks: ITask[]) =>
+  tasks?.sort((a, b) => (a.position > b.position ? 1 : -1));
+
+export const getColumnId = (tasks: ITask[]) => {
+  const firstElemColumn = tasks?.length > 0 ? tasks[0].column_id : null;
+  return firstElemColumn || null;
+};

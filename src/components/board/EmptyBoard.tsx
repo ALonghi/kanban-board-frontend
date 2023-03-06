@@ -31,13 +31,7 @@ export default function EmptyBoard({ setOpen }) {
         <p className="mt-2 text-sm text-gray-500">
           Get started by creating a new one!
         </p>
-        <div
-          className="mt-6"
-          onClick={() => {
-            console.log(`button clicked!!`);
-            setOpen(true);
-          }}
-        >
+        <div className="mt-6" onClick={() => setOpen(true)}>
           <button
             type="button"
             className="inline-flex items-center rounded-md border border-transparent bg-theme-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-theme-700 focus:outline-none focus:ring-2 focus:ring-theme-700 focus:ring-offset-2"

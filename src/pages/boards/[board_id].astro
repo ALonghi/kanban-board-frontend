@@ -1,5 +1,5 @@
 ---
-import KanbanView from "../../components/board/kanban//KanbanView";
+import KanbanView from "../../components/board/kanban/KanbanView/KanbanView";
 import Layout from "../../layouts/Layout.astro";
 import BoardService from "../../service/boardService";
 import TaskService from "../../service/taskService";
@@ -7,6 +7,7 @@ import { updateBoard } from "../../stores/boardsStore";
 const { board_id } = Astro.params;
 const board = await BoardService.getBoard(board_id).then(updateBoard);
 const tasks = board ? await TaskService.getTasksByBoardId(board_id) : [];
+console.log(`returned ${tasks.length} tasks.`);
 ---
 
 <Layout title="Kanban Board">

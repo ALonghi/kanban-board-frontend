@@ -54,7 +54,7 @@ TaskProps) {
   return (
     showComponent && (
       <div
-        className={`cursor-grab relative flex items-start space-x-3 rounded-lg
+        className={`cursor-move relative flex items-start space-x-3 rounded-lg
             border-0 border-gray-300 bg-white px-4 py-4 shadow-md mt-3 max-w-full h-[5rem]
             `}
       >

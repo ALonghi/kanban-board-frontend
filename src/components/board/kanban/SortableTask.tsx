@@ -25,7 +25,10 @@ export const SortableTask = ({
     setNodeRef,
     transform,
     transition,
-  } = useSortable({ id: task.id });
+  } = useSortable({
+    id: task.id,
+    // data: { previousColumnId: task.column_id || "-1" },
+  });
 
   const style = {
     transform: CSS.Transform.toString(transform),
