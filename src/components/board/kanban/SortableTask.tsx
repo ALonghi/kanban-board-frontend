@@ -1,6 +1,7 @@
 import React from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 import { ITask } from "../../../model/task";
 import TaskCard from "./TaskCard";
@@ -36,25 +37,40 @@ export const SortableTask = ({
   };
 
   return (
-    <div
-      ref={setNodeRef}
-      // @ts-ignore
-      style={style}
-      {...attributes}
-      {...listeners}
-      onClick={() => {
-        if (someoneIsDragging) {
-          console.log("a card somewhere is being dragged still");
-          return;
-        }
-        if (isDragging) {
-          console.log("this card is being dragged still");
-          return;
-        }
-      }}
-      className={isDragging ? `opacity-60` : `opacity-100`}
+    // <div
+    //   ref={setNodeRef}
+    //   // @ts-ignore
+    //   style={style}
+    //   {...attributes}
+    //   {...listeners}
+    //   onClick={() => {
+    //     if (someoneIsDragging) {
+    //       console.log("a card somewhere is being dragged still");
+    //       return;
+    //     }
+    //     if (isDragging) {
+    //       console.log("this card is being dragged still");
+    //       return;
+    //     }
+    //   }}
+    //   className={isDragging ? `opacity-60` : `opacity-100`}
+    // >
+    <Draggable
+    draggableId={task.id}
+    index={task.position}
     >
-      <TaskCard task={task} onUpdate={onUpdate} onDelete={onDelete} />
-    </div>
+      {(provided) => (
+        <div
+          style={style}
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          className={`${task.id}__items`}
+
+        >
+          <TaskCard task={task} onUpdate={onUpdate} onDelete={onDelete} />
+        </div>
+      )}
+    </Draggable>
   );
 };

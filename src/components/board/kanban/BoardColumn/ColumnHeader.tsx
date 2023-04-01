@@ -1,42 +1,57 @@
 import { PlusIcon } from "@heroicons/react/24/outline";
-import { ChangeEvent } from "react";
+import { ChangeEvent, useState } from "react";
 
-import { IBoardColumn } from "../../../../model/board";
+import { IBoardColumn, IBoard } from '../../../../model/board';
 import { getEmptyTask, ITask } from "../../../../model/task";
 import SaveIcon from "../../../shared/SaveIcon";
+import { useColumnHooks } from "./useColumnHooks";
 
 type ColumnHeaderProps = {
+  board: IBoard;
   column?: IBoardColumn;
-  isTyping: boolean;
-  updateColumnName: (e: ChangeEvent<HTMLInputElement>) => void;
-  saveColumn: () => Promise<void>;
+  tasks: ITask[]
   overriddenName?: string;
-  setNewTaskData: (task: Omit<ITask, "id" | "created_at" | "position">) => void;
-  boardId: string;
+  updateBoardColumn: (column: IBoardColumn) => Promise<void>;
+  updateTasks?: (tasks: ITask[]) => void
+  setNewTaskData: (task: Omit<ITask, "id" | "created_at" | "position">) => void
 };
 
 export default function ColumnHeader({
+  board,
   column,
-  isTyping,
-  updateColumnName,
-  saveColumn,
   overriddenName,
-  setNewTaskData,
-  boardId,
+  updateBoardColumn,
+  setNewTaskData
 }: ColumnHeaderProps) {
+  const [currentColumn, setCurrentColumn] = useState<IBoardColumn | null>(
+    column || null
+  );
+  const [isTyping, setIsTyping] = useState<boolean>(false);
+  const saveColumn = async () => {
+    await updateBoardColumn(currentColumn).then(() => {
+      setIsTyping(false);
+      setCurrentColumn(null);
+    });
+  };
+
+  const updateColumnName = (e) => {
+    setIsTyping(true);
+    setCurrentColumn((prev) => ({ ...prev, name: e.target.value }));
+  };
+
   return (
     <>
       <div
         className={` mb-4 letter-spacing-2 py-2 px-4 flex flex-col
               bg-gray-100 rounded-t-md w-full`}
       >
-        {(column?.name && !isTyping) || overriddenName ? (
+        {(currentColumn?.name && !isTyping) || overriddenName ? (
           <p
             className={`w-fit font-bold text-gray-700 ${
               overriddenName ? `` : `uppercase`
             } text-sm h-full`}
           >
-            {column?.name ||
+            {currentColumn?.name ||
               (overriddenName ? overriddenName : "Create new column")}
           </p>
         ) : (
@@ -47,7 +62,7 @@ export default function ColumnHeader({
                             `}
               onKeyDown={(e) => (e.key === "Enter" ? saveColumn() : null)}
               onChange={updateColumnName}
-              value={column?.name || ""}
+              value={currentColumn?.name || ""}
               placeholder="Create new column.."
             />
             {isTyping && <SaveIcon saveAction={saveColumn} />}
@@ -56,7 +71,7 @@ export default function ColumnHeader({
       </div>
       <div
         className={`bg-gray-100 hover:bg-gray-200 py-0.5 px-4 mb-2 rounded-md w-full cursor-pointer`}
-        onClick={() => setNewTaskData(getEmptyTask(column?.id, boardId))}
+        onClick={() => setNewTaskData(getEmptyTask(board.id, currentColumn?.id))}
       >
         <PlusIcon className={`text-gray-500 w-5 mx-auto`} />
       </div>

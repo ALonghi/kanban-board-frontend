@@ -1,4 +1,4 @@
-import { IBoardColumn } from "../../../../model/board";
+import { IBoardColumn, IBoard } from '../../../../model/board';
 import { ITask } from "../../../../model/task";
 import ColumnBody from "./ColumnBody";
 import ColumnHeader from "./ColumnHeader";
@@ -10,7 +10,7 @@ type TaskColumnProps = {
   updateTasks?: (tasks: ITask[]) => void;
   updateBoardColumn: (column: IBoardColumn) => Promise<void>;
   overriddenName?: string;
-  boardId: string;
+  board: IBoard;
   isDragging: boolean;
 };
 
@@ -20,10 +20,9 @@ export default function BoardColumn({
   tasks,
   updateTasks,
   updateBoardColumn,
-  boardId,
+  board,
   isDragging,
 }: TaskColumnProps) {
-  const {
     currentColumn,
     newTaskData,
     setNewTaskData,
@@ -32,22 +31,21 @@ export default function BoardColumn({
     updateColumnName,
     deleteTask,
     saveTaskData,
-  } = useColumnHooks(boardId, column, tasks, updateBoardColumn, updateTasks);
+  } = useColumnHeaderHooks(board.id, column, tasks, updateBoardColumn, updateTasks);
 
   return (
-    <>
       <div
         className={`flex flex-col justify-center mx-4 min-h-[80vh] 
                  w-[14rem] overflow-x-visible`}
       >
         <ColumnHeader
           column={currentColumn}
-          isTyping={isTyping}
-          updateColumnName={updateColumnName}
-          saveColumn={saveColumn}
+          // isTyping={isTyping}
+          // updateColumnName={updateColumnName}
+          // saveColumn={saveColumn}
           overriddenName={overriddenName}
-          setNewTaskData={setNewTaskData}
-          boardId={boardId}
+          // setNewTaskData={setNewTaskData}
+          boardId={board.id}
         />
 
         <ColumnBody
@@ -57,8 +55,8 @@ export default function BoardColumn({
           saveTaskData={saveTaskData}
           deleteTask={deleteTask}
           columnId={currentColumn?.id}
+          board={board}
         />
       </div>
-    </>
   );
 }

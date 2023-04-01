@@ -21,7 +21,7 @@ console.log(`returned ${tasks.length} tasks.`);
       }
     </h1>
     <div class="overflow-x-auto max-w-full">
-      <KanbanView board={board} tasks={tasks} client:visible />
+      <KanbanView board={board} tasks={tasks} client:only />
     </div>
   </div>
 </Layout>

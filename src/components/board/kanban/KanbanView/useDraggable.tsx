@@ -35,13 +35,15 @@ export const useDraggable = (
     setIsDragging(true);
   }
 
-  function handleDragEnd(event: DragEndEvent) {
-    console.log(`drag end active ${JSON.stringify(event.active, null, 2)}`);
-    setIsDragging(false);
+  function handleDragEnd({ destination, source }) {
+    console.log(`drag end destination ${JSON.stringify(destination, null, 2)}`);
+    console.log(`drag end source ${JSON.stringify(source, null, 2)}`);
+    if (!destination) return
 
-    const { active, over } = event;
+    const active = source
+    const over = destination
 
-    if (over && active.id !== over.id) {
+    if (over && active?.index !== over.index) {
       const oldIndex = tasks.findIndex((i) => i.id === active?.id);
       const newIndex = tasks.findIndex((i) => i.id === over?.id);
       const reordered = arrayMove([...tasks], oldIndex, newIndex).map(

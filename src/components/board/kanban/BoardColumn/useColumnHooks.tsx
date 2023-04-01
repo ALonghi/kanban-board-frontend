@@ -1,6 +1,5 @@
 import { cloneDeep } from "lodash";
 import { useState } from "react";
-import { IBoardColumn } from "../../../../model/board";
 import { CreateTaskRequest } from "../../../../model/dto";
 import { ITask } from "../../../../model/task";
 import { createToast, IToast } from "../../../../model/toast";
@@ -10,30 +9,11 @@ import { sortByPosition } from "../../../../utils/helpers";
 
 export const useColumnHooks = (
   boardId: string,
-  column: IBoardColumn,
   tasks: ITask[],
-  updateBoardColumn: (column: IBoardColumn) => Promise<void>,
-  updateTasks?: (tasks: ITask[]) => void
+  updateTasks: React.Dispatch<React.SetStateAction<ITask[]>>,
+  setNewTaskData: React.Dispatch<React.SetStateAction<Omit<ITask, "id" | "created_at" | "position"> | null>>
 ) => {
-  const [currentColumn, setCurrentColumn] = useState<IBoardColumn | null>(
-    column || null
-  );
-  const [isTyping, setIsTyping] = useState<boolean>(false);
-  const [newTaskData, setNewTaskData] = useState<CreateTaskRequest | null>(
-    null
-  );
 
-  const saveColumn = async () => {
-    await updateBoardColumn(currentColumn).then(() => {
-      setIsTyping(false);
-      setCurrentColumn(null);
-    });
-  };
-
-  const updateColumnName = (e) => {
-    setIsTyping(true);
-    setCurrentColumn((prev) => ({ ...prev, name: e.target.value }));
-  };
 
   const saveTaskData = async (task: ITask | Partial<ITask>): Promise<void> => {
     const ordered = sortByPosition(tasks || []);
@@ -49,7 +29,6 @@ export const useColumnHooks = (
           exists
             ? updateTasks(tasks.map((t) => (t.id === result.id ? result : t)))
             : updateTasks([...tasks, result]);
-          setIsTyping(false);
           setNewTaskData(null);
           const toast: IToast = createToast(
             "Task updated successfully.",
@@ -62,7 +41,7 @@ export const useColumnHooks = (
       const task_request: CreateTaskRequest = {
         title: orderedTask.title,
         description: orderedTask.description || null,
-        column_id: column?.id || null,
+        column_id: task?.column_id || null,
         above_task_id: orderedTask.above_task_id || null,
         board_id: boardId,
       };
@@ -73,7 +52,6 @@ export const useColumnHooks = (
           { ...created, position: lastPosition + 1 },
         ];
         updateTasks(updatedList);
-        setIsTyping(false);
         setNewTaskData(null);
         const toast: IToast = createToast(
           "Task created successfully.",
@@ -126,12 +104,6 @@ export const useColumnHooks = (
   };
 
   return {
-    currentColumn,
-    newTaskData,
-    setNewTaskData,
-    isTyping,
-    saveColumn,
-    updateColumnName,
     deleteTask,
     saveTaskData,
   };
