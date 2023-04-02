@@ -1,10 +1,8 @@
 import { Dialog } from "@headlessui/react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import InputForm from "../shared/InputForm";
 import Modal from "../shared/Modal";
 import Spinner from "../shared/Spinner/Spinner";
-import BoardService from "../../service/boardService";
-import { IBoard } from "../../model/board";
 import { CreateBoardRequest, EMPTY_BOARD_REQ } from "../../model/dto";
 
 type CreateBoardProps = {
@@ -66,7 +64,7 @@ export default function CreateBoard({
         <div className="mt-5 sm:my-8">
           <button
             type="button"
-            className="inline-flex w-full justify-center rounded-md border border-transparent 
+            className="inline-flex w-full justify-center rounded-md border border-transparent
                         bg-theme-500 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-theme-600 focus:outline-none focus:ring-2 focus:ring-theme-700 focus:ring-offset-2 sm:text-sm"
             onClick={() => createBoard()}
           >

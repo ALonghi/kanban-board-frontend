@@ -1,5 +1,6 @@
-import { IBoardColumn, IBoard } from './board';
-import { ITask } from './task';
+import { IBoard, IBoardColumn } from "./board";
+import { ITask } from "./task";
+
 export interface ApiResponse<T> {
   success: boolean;
   data?: T;
@@ -7,11 +8,11 @@ export interface ApiResponse<T> {
 }
 
 export interface CreateTaskRequest {
-  title: string,
-  description?: string,
-  column_id?: IBoardColumn['id'],
-  above_task_id?: ITask['id'],
-  board_id: IBoard['id'],
+  title: string;
+  description?: string;
+  column_id?: IBoardColumn["id"];
+  above_task_id?: ITask["id"];
+  board_id: IBoard["id"];
 }
 
 export interface CreateBoardRequest {

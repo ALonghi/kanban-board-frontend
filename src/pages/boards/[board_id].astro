@@ -1,18 +1,17 @@
 ---
-import KanbanView from "../../components/board/KanbanView";
+import KanbanView from "../../components/board/kanban/KanbanView/KanbanView";
 import Layout from "../../layouts/Layout.astro";
 import BoardService from "../../service/boardService";
 import TaskService from "../../service/taskService";
+import { updateBoard } from "../../stores/boardsStore";
 const { board_id } = Astro.params;
-const board = await BoardService.getBoard(board_id);
+const board = await BoardService.getBoard(board_id).then(updateBoard);
 const tasks = board ? await TaskService.getTasksByBoardId(board_id) : [];
-console.log(`got ${tasks.length} tasks`);
-console.log(`board page tasks response: \n${JSON.stringify(tasks)}`)
-
+console.log(`returned ${tasks.length} tasks.`);
 ---
 
 <Layout title="Kanban Board">
-  <div class="flex flex-col text-left w-full max-w-full overflow-x-auto">
+  <div class="flex flex-col text-left w-full max-w-full overflow-x-overlay">
     <h1 class="w-8/12 text-3xl sm:text-4xl font-bold clip">
       {board.title}
       {
@@ -21,6 +20,8 @@ console.log(`board page tasks response: \n${JSON.stringify(tasks)}`)
         )
       }
     </h1>
-    <KanbanView board={board} tasks={tasks} client:visible />
+    <div class="overflow-x-auto max-w-full">
+      <KanbanView board={board} tasks={tasks} client:only />
+    </div>
   </div>
 </Layout>

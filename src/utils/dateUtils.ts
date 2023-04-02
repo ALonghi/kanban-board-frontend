@@ -22,4 +22,6 @@ export default class DateUtils {
         date.getMinutes().toString().padStart(2, "0")
       );
   };
+
+  static getCurrentUTCDateStr = (): string => new Date().toISOString();
 }
