@@ -1,5 +1,5 @@
 import { PlusIcon } from "@heroicons/react/20/solid";
-import { useStore } from '@nanostores/react';
+import { useStore } from "@nanostores/react";
 import { useState } from "react";
 import { IBoard } from "../../model/board";
 import { CreateBoardRequest } from "../../model/dto";
@@ -16,7 +16,7 @@ export default function BoardsOverview() {
   const addBoard = async (board: CreateBoardRequest) => {
     return await BoardService.createBoard(board).then(
       (board_response: IBoard) => {
-        addBoard(board_response)
+        addBoard(board_response);
         setOpen(false);
       }
     );

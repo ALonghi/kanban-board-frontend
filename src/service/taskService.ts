@@ -16,7 +16,7 @@ export default class TaskService {
       if (!response.success || !response.data)
         throw new Error(response.error_message);
       Logger.info(
-        `Added board ${response.data?.title} with id ${response.data?.id}`
+        `Added task ${response.data?.title} with id ${response.data?.id}`
       );
       return response.data;
     } catch (e) {

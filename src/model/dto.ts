@@ -1,5 +1,6 @@
-import { IBoardColumn, IBoard } from "./board";
+import { IBoard, IBoardColumn } from "./board";
 import { ITask } from "./task";
+
 export interface ApiResponse<T> {
   success: boolean;
   data?: T;

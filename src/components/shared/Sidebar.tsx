@@ -57,7 +57,7 @@ export default function Sidebar() {
                   <div className="absolute top-0 right-0 -mr-12 pt-2">
                     <button
                       type="button"
-                      className="ml-1 flex h-10 w-10 items-center justify-center rounded-full 
+                      className="ml-1 flex h-10 w-10 items-center justify-center rounded-full
                       focus:outline-none focus-visible:outline-none "
                       onClick={() => setSidebarOpen(false)}
                     >
@@ -107,7 +107,7 @@ export default function Sidebar() {
 
       <div className="fixed top-0 left-0 flex h-16 w-16 ">
         <button
-          className="px-4 text-gray-500 focus:outline-none 
+          className="px-4 text-gray-500 focus:outline-none
                     focus:ring-0 lg:hidden"
           onClick={() => setSidebarOpen(true)}
         >

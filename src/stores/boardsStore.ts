@@ -1,8 +1,6 @@
-import { atom, WritableAtom } from "nanostores";
-import { IBoard, IBoardColumn } from "../model/board";
-import { ITask } from "../model/task";
+import { atom } from "nanostores";
+import { IBoard } from "../model/board";
 import BoardService from "../service/boardService";
-import { groupBy } from "../utils/helpers";
 
 export const cachedBoards = atom<IBoard[]>(await BoardService.getBoards());
 

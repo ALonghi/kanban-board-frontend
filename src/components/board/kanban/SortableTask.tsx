@@ -1,7 +1,7 @@
 import React from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { Draggable } from "react-beautiful-dnd";
 
 import { ITask } from "../../../model/task";
 import TaskCard from "./TaskCard";
@@ -55,10 +55,7 @@ export const SortableTask = ({
     //   }}
     //   className={isDragging ? `opacity-60` : `opacity-100`}
     // >
-    <Draggable
-    draggableId={task.id}
-    index={task.position}
-    >
+    <Draggable draggableId={task.id} index={task.position}>
       {(provided) => (
         <div
           style={style}
@@ -66,7 +63,6 @@ export const SortableTask = ({
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           className={`${task.id}__items`}
-
         >
           <TaskCard task={task} onUpdate={onUpdate} onDelete={onDelete} />
         </div>

@@ -23,6 +23,5 @@ export default class DateUtils {
       );
   };
 
-  static getCurrentUTCDateStr = (): string =>
-  new Date().toISOString();
+  static getCurrentUTCDateStr = (): string => new Date().toISOString();
 }

@@ -1,28 +1,29 @@
 import { useEffect, useState } from "react";
 import { IBoard, IBoardColumn } from "../../../../model/board";
-import GroupedTasks from '../../../../model/groupedTasks';
+import GroupedTasks from "../../../../model/groupedTasks";
 import { ITask } from "../../../../model/task";
 import { createToast, IToast } from "../../../../model/toast";
 import BoardService from "../../../../service/boardService";
 import { addNotification } from "../../../../stores/notificationStore";
-import { groupByColumn, UNASSIGNED_COLUMN_ID } from '../../../../utils/helpers';
+import { groupByColumn } from "../../../../utils/helpers";
 import Logger from "../../../../utils/logging";
 
 export const useKanbanData = (board: IBoard, tasks: ITask[]) => {
   const [currentBoard, setCurrentBoard] = useState<IBoard>(board);
-  const [newTaskData, setNewTaskData] = useState<Omit<ITask, "id" | "created_at" | "position"> | null>(null)
+  const [newTaskData, setNewTaskData] = useState<Omit<
+    ITask,
+    "id" | "created_at" | "position"
+  > | null>(null);
 
-  const mapGroupedTasks = () =>
-    groupByColumn(tasks, board)
+  const mapGroupedTasks = () => groupByColumn(tasks, board);
 
-  const [groupedTasks, setGroupedTasks] = useState<
-    GroupedTasks[]
-  >(tasks?.length > 0 ? mapGroupedTasks() : []);
+  const [groupedTasks, setGroupedTasks] = useState<GroupedTasks[]>(
+    tasks?.length > 0 ? mapGroupedTasks() : []
+  );
 
   useEffect(() => {
-    setGroupedTasks(() => mapGroupedTasks())
-  }, [tasks])
-
+    setGroupedTasks(() => mapGroupedTasks());
+  }, [tasks]);
 
   const updateBoardColumn = async (col: IBoardColumn) => {
     const previousColumns =

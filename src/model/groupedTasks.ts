@@ -1,9 +1,8 @@
 import { ITask } from "./task";
-import { IBoardColumn } from './board';
+import { IBoardColumn } from "./board";
 
-export default interface GroupedTask {
-    [columnId: IBoardColumn['id']]: {
-        column: IBoardColumn,
-        items: ITask[]
-    }
+export default interface GroupedTasks {
+  columnId: IBoardColumn["id"];
+  column: IBoardColumn;
+  items: ITask[];
 }

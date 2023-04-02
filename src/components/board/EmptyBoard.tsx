@@ -1,12 +1,10 @@
 import { PlusIcon } from "@heroicons/react/20/solid";
-import { useEffect, useState } from "react";
-import CreateBoard from "./CreateBoard";
 
 export default function EmptyBoard({ setOpen }) {
   return (
     <>
       <div
-        className="my-16 relative block w-full rounded-lg border-2 border-dashed border-gray-300 
+        className="my-16 relative block w-full rounded-lg border-2 border-dashed border-gray-300
             p-12 text-center hover:border-gray-400 
             focus:outline-none focus:ring-0 "
       >

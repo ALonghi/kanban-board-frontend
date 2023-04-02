@@ -1,20 +1,16 @@
 import { PlusIcon } from "@heroicons/react/24/outline";
-import { ChangeEvent, useState } from "react";
-
-import { IBoardColumn, IBoard } from '../../../../model/board';
+import { useState } from "react";
+import { IBoard, IBoardColumn } from "../../../../model/board";
 import { getEmptyTask, ITask } from "../../../../model/task";
 import SaveIcon from "../../../shared/SaveIcon";
-import { useColumnHooks } from "./useColumnHooks";
-import { UNASSIGNED_COLUMN_ID } from '../../../../utils/helpers';
+import { UNASSIGNED_COLUMN_ID } from "../../../../utils/helpers";
 
 type ColumnHeaderProps = {
   board: IBoard;
   column?: IBoardColumn;
-  tasks: ITask[]
   overriddenName?: string;
   updateBoardColumn: (column: IBoardColumn) => Promise<void>;
-  updateTasks?: (tasks: ITask[]) => void
-  setNewTaskData: (task: Omit<ITask, "id" | "created_at" | "position">) => void
+  setNewTaskData: (task: Omit<ITask, "id" | "created_at" | "position">) => void;
 };
 
 export default function ColumnHeader({
@@ -22,7 +18,7 @@ export default function ColumnHeader({
   column,
   overriddenName,
   updateBoardColumn,
-  setNewTaskData
+  setNewTaskData,
 }: ColumnHeaderProps) {
   const [currentColumn, setCurrentColumn] = useState<IBoardColumn | null>(
     column || null
@@ -72,7 +68,11 @@ export default function ColumnHeader({
       </div>
       <div
         className={`bg-gray-100 hover:bg-gray-200 py-0.5 px-4 mb-2 rounded-md w-full cursor-pointer`}
-        onClick={() => setNewTaskData(getEmptyTask(board.id, currentColumn?.id || UNASSIGNED_COLUMN_ID))}
+        onClick={() =>
+          setNewTaskData(
+            getEmptyTask(board.id, currentColumn?.id || UNASSIGNED_COLUMN_ID)
+          )
+        }
       >
         <PlusIcon className={`text-gray-500 w-5 mx-auto`} />
       </div>
