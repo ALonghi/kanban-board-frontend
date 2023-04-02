@@ -1,16 +1,16 @@
 :root {
   --accent: 124, 58, 237;
   --accent-gradient: linear-gradient(
-                  45deg,
-                  rgb(var(--accent)),
-                  #da62c4 30%,
-                  white 60%
+    45deg,
+    rgb(var(--accent)),
+    #da62c4 30%,
+    white 60%
   );
 }
 
 code {
   font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
-  Bitstream Vera Sans Mono, Courier New, monospace;
+    Bitstream Vera Sans Mono, Courier New, monospace;
 }
 
 body,
@@ -22,8 +22,8 @@ main {
 * {
   box-sizing: border-box !important;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-  "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-  sans-serif;
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
 }
 
 .text-gradient {
@@ -31,14 +31,14 @@ main {
   background-clip: text;
   -webkit-text-fill-color: transparent;
   background-image: linear-gradient(
-                  270deg,
-                  #74ffdcff,
-                  #61f1cdff,
-                  #4de2bfff,
-                  #3ad4b0ff,
-                  #27c5a1ff,
-                  #13b793ff,
-                  #00a884ff
+    270deg,
+    #74ffdcff,
+    #61f1cdff,
+    #4de2bfff,
+    #3ad4b0ff,
+    #27c5a1ff,
+    #13b793ff,
+    #00a884ff
   );
   background-size: 200%;
   background-position: 0%;
