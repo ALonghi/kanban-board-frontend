@@ -2,13 +2,14 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { ITask } from "../../../model/task";
 import SaveIcon from "../../shared/SaveIcon";
 import { useState } from "react";
+import { IBoardColumn } from '../../../model/board';
 
 type TaskProps = {
   task: ITask | Partial<ITask>;
   isNew?: boolean;
   isFocus?: boolean;
   onUpdate: (updatedTask: ITask | Partial<ITask>) => Promise<void>;
-  onDelete: (id: ITask["id"]) => Promise<void>;
+  onDelete: (taskId: ITask["id"], colId?: IBoardColumn["id"]) => Promise<void>;
   // onSelect: (id: TaskModel['id']) => void;
 };
 
@@ -33,7 +34,7 @@ TaskProps) {
 
   const handleDeleteClick = async () => {
     const promise = task?.id
-      ? onDelete(task.id)
+      ? onDelete(task?.id, task?.column_id)
       : Promise.resolve(setShowComponent(false));
     await promise.then(() => {
       setIsFocused(false);

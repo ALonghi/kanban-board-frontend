@@ -5,6 +5,7 @@ import { IBoardColumn, IBoard } from '../../../../model/board';
 import { getEmptyTask, ITask } from "../../../../model/task";
 import SaveIcon from "../../../shared/SaveIcon";
 import { useColumnHooks } from "./useColumnHooks";
+import { UNASSIGNED_COLUMN_ID } from '../../../../utils/helpers';
 
 type ColumnHeaderProps = {
   board: IBoard;
@@ -71,7 +72,7 @@ export default function ColumnHeader({
       </div>
       <div
         className={`bg-gray-100 hover:bg-gray-200 py-0.5 px-4 mb-2 rounded-md w-full cursor-pointer`}
-        onClick={() => setNewTaskData(getEmptyTask(board.id, currentColumn?.id))}
+        onClick={() => setNewTaskData(getEmptyTask(board.id, currentColumn?.id || UNASSIGNED_COLUMN_ID))}
       >
         <PlusIcon className={`text-gray-500 w-5 mx-auto`} />
       </div>

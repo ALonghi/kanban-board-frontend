@@ -1,14 +1,12 @@
-import { closestCenter, DndContext, useDroppable } from "@dnd-kit/core";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { IBoard } from "../../../../model/board";
 import { ITask } from "../../../../model/task";
-import BoardColumn from "../BoardColumn/BoardColumn";
-import { useDraggable } from "./useDraggable";
-import { useKanbanData } from "./useKanbanData";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { groupByColumn } from "../../../../utils/helpers";
+import { UNASSIGNED_COLUMN_ID, UNASSIGNED_COLUMN_NAME } from '../../../../utils/helpers';
 import ColumnHeader from "../BoardColumn/ColumnHeader";
 import { useColumnHooks } from "../BoardColumn/useColumnHooks";
 import TaskCard from "../TaskCard";
+import { useDraggable } from "./useDraggable";
+import { useKanbanData } from "./useKanbanData";
 
 
 type KanbanViewProps = {
@@ -20,8 +18,7 @@ export default function KanbanView({ board, tasks }: KanbanViewProps) {
   const {
     currentBoard,
     groupedTasks,
-    currentTasks,
-    setCurrentTasks,
+    setGroupedTasks,
     updateTasksForColumn,
     updateBoardColumn,
     newTaskData,
@@ -31,49 +28,44 @@ export default function KanbanView({ board, tasks }: KanbanViewProps) {
   const {
     deleteTask,
     saveTaskData,
-  } = useColumnHooks(board.id, tasks, setCurrentTasks, setNewTaskData);
+  } = useColumnHooks(board.id, groupedTasks, setGroupedTasks, setNewTaskData);
 
   const {
-    isDragging,
-    sensors,
-    handleDragStart,
     handleDragEnd,
-  } = useDraggable(currentTasks, updateTasksForColumn, board.id)
+  } = useDraggable(groupedTasks, updateTasksForColumn, board.id)
 
-  console.log(`groupedTasks: ${JSON.stringify(groupedTasks,null,2)}`)
-  console.log(`new task data ${JSON.stringify(newTaskData,null,2)}`)
   return (
     <div
       className="mx-2 my-8 min-w-full flex flex-1 items-stretch
     gap-x-2 overflow-x-scroll flex-nowrap w-fit"
     >
-      <DragDropContext onDragEnd={handleDragEnd}>
+      <DragDropContext onDragEnd={handleDragEnd} >
         {groupedTasks
           .map(elem => (
             <div
               className={`${elem.columnId}__wrapper
                             flex flex-col justify-start items-center mx-4 min-h-[80vh] 
                  w-[14rem] overflow-x-visible `}
-              key={elem.columnId || "-1"}
+              key={elem.columnId || UNASSIGNED_COLUMN_ID}
             >
               <ColumnHeader
                 board={board}
                 column={elem.column}
                 tasks={elem.elems}
-                overriddenName={elem.column?.name || "Unassigned"}
+                overriddenName={elem.column?.name || UNASSIGNED_COLUMN_NAME}
                 updateBoardColumn={updateBoardColumn}
                 setNewTaskData={setNewTaskData}
               />
               <div className={`${elem.columnId}__container
                             bg-gray-100 py-4 px-2 rounded-md w-full h-full shadow-md`}>
-                <Droppable droppableId={elem.columnId || "-99999"}>
+                <Droppable droppableId={elem.columnId || UNASSIGNED_COLUMN_ID}>
                   {(provided) => (
                     <div ref={provided.innerRef} {...provided.droppableProps}>
-                      {elem.elems.map((item, index) => (
+                      {elem.elems.map((item) => (
                         <Draggable
                           key={item.id}
                           draggableId={item.id}
-                          index={index}
+                          index={item.position}
                         >
                           {(provided) => (
                             <div
@@ -93,7 +85,7 @@ export default function KanbanView({ board, tasks }: KanbanViewProps) {
                           isNew
                           isFocus
                           onUpdate={(t) => saveTaskData(t)}
-                          onDelete={(tId) => deleteTask(tId)}
+                          onDelete={(tId, colId) => deleteTask(tId, colId)}
                         />
                       )}
                       {provided.placeholder}
@@ -104,51 +96,6 @@ export default function KanbanView({ board, tasks }: KanbanViewProps) {
             </div>
           ))}
       </DragDropContext>
-
-      {/* <DragDropContext
-        autoScroll={false}
-        collisionDetection={closestCenter}
-        // onDragStart={handleDragStart}
-        onDragEnd={handleDragEnd}
-        // sensors={sensors}
-      > */}
-
-
-      {/* <DndContext
-        autoScroll={false}
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragStart={handleDragStart}
-        onDragEnd={handleDragEnd}
-      > */}
-      {/* <BoardColumn
-          tasks={updatedTasksGrouped.get(null) || []}
-          updateTasks={(list) => updateTasksForColumn(list, null)}
-          updateBoardColumn={updateBoardColumn}
-          overriddenName="Unassigned"
-          board={currentBoard}
-          isDragging={isDragging}
-        />
-        {currentBoard?.columns?.map((col) => (
-          <BoardColumn
-            key={col.id}
-            column={col}
-            tasks={updatedTasksGrouped.get(col.id) || []}
-            updateTasks={(list) => updateTasksForColumn(list, col.id)}
-            updateBoardColumn={updateBoardColumn}
-            board={currentBoard}
-            isDragging={isDragging}
-          />
-        ))}
-        <BoardColumn
-          tasks={[]}
-          updateTasks={(list) => null}
-          updateBoardColumn={updateBoardColumn}
-          board={currentBoard}
-          isDragging={isDragging}
-        />
-        {/* </DndContext> */}
-      {/*</DragDropContext> */}
 
     </div>
   );
